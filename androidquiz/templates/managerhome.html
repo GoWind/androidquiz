@@ -1,0 +1,55 @@
+<! doctype html>
+
+
+	<head>
+		<title> Manager Home</title>
+	</head>
+
+
+
+	<body>
+
+
+		<h2> Add question </h2>
+	<div>
+		<form method="POST" action="/submitquestion">
+		Question text <input type="text" name="questiontext"></input><br/>
+		option A<input type="text" name="optiona"></input><br/>
+		option B<input type="text" name="optionb"></input><br/>
+		option C<input type="text" name="optionc"></input><br/>
+		option D<input type="text" name="optiond"></input><br/>k
+
+		<input type="radio" name="answer" value="a">a</input>
+		<input type="radio" name="answer" value="b">b</input>
+		<input type="radio" name="answer" value="c">c</input>
+		<input type="radio" name="answer" value="d">d</input>
+		
+		<input type="radio" name="type" value="single">single</input>
+		<input type="radio" name="type" value="multiple">multiple</input>
+		<input type="radio" name="type" value="text">text</input>
+
+		<input type="submit" value="save question">
+	</form>
+	</div>
+
+	<div id="boxer">
+		 <input type="text" name="teamname" placeholder="teamname"/>
+		 <button type="button" name="generator"/>
+	</div>
+
+
+
+	</body>
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

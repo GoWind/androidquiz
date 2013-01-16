@@ -1,0 +1,22 @@
+<! doctype html>
+
+
+<head>
+ <style type="text/css">
+   body { background : rgb(157,38,29);color:white ; }
+   h1 { font-size: 6em ; text-shadow:2px 2px 2px rgb(51,51,51); border: 1px solid white; border-radius:3px;}
+ </style>
+</head>
+<body>
+<h1> Hello there </h1>
+<form method="POST" action="/submitquestion">
+ {% for question in questions %}
+      <p>{{ question['_id'] }}. {{ question['question_text'] }}</p>
+	  {% for option in question['options'] %}
+		<input type="radio" name= {{ question['_id'] }} value={{ option }}> {{ question['options'][option] }}
+	  {% endfor %}
+  {% endfor %}<br/>
+  <input type="submit" value="Done">
+</form>
+</body>
+</html>

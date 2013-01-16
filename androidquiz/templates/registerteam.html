@@ -1,0 +1,20 @@
+<!doctype html>
+
+
+
+<head>
+	<title> Register your team</title>
+
+</head>
+
+<body>
+	<form method="POST" action="/registerteam">
+		<input type="hidden" name="id" value= {{ team._id }} />
+		<h3> {{ team.teamname }}</h3>  
+		Password<input type="password" name="password">
+		Confirm Password<input type="password" name="confirm">
+		<input type="submit" value="Register"/>
+	</form>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+
+
+		<head>
+
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<script type="text/javascript" src={{ url_for('static',filename = 'timerscript.js') }} ></script>
+		<style type="text/css">
+			#quizform { display: none;
+		}
+		</style>
+		<script type="text/javascript">
+				start = function(){
+					var form  = document.getElementById('quizform');
+					form.style.display = 'block';
+					init();
+				}
+		</script>
+		</head>
+
+		<body>
+
+			<div id="numbers">
+				<input id="txt" readonly="true" type="text" value="00:00" border="0" name="disp">
+			</div>
+
+			<div id="buttonbox">
+				<button type="button" onclick="start();return false">Click me</button>
+			</div>
+			
+
+				<form id="quizform" method="POST" action="/submit">
+					<input type="hidden" name="teamid" value=" {{ teamid }}" />
+					<div id="quiz">
+								{% for question in questions %}
+									<p class="blackbox">
+											<span id="question"> {{ question.question_text }}</span> <br/>
+											{% for option in question.options %}
+											<input type="radio" name = {{ question._id }} value= {{ option }}> {{ question.options[option] }} </input>
+											{% endfor %}
+									</p>
+								{% endfor %}
+								<input type="submit" value="Done.Submit."/>
+					</div>
+				</form>
+		</div>
+		</body>
+
+</html>
