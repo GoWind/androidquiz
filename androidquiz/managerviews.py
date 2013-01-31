@@ -1,9 +1,9 @@
-from androidquiz import app,roles
-from models import add_question
+from androidquiz import app,roles,coll_submitted_users,coll_questions
+from models import add_question , add_team,calculate_score,get_team_doc
 from flask import request , Response ,session,redirect, url_for,render_template
 from cgi import escape
 from functools import wraps
-
+import operator
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
@@ -71,9 +71,10 @@ def managerlogout():
 
 	
 ''' add question'''
-@app.route('/submitquestion',methods=['POST'])
-@requires_auth
+@app.route('/submitquestion',methods=['GET','POST'])
 def submitquestion():
+	if 'logged_in_as' not in session or session['logged_in_as'] != roles[1]:
+		return Response("Illegal Access",403)
 	if request.method == 'POST':
 			options = {}
 			question_text = request.form['questiontext']
@@ -82,10 +83,46 @@ def submitquestion():
 			options['c'] = request.form['optionc']
 			options['d'] = request.form['optiond']
 			answer = request.form['answer']
-			type= request.form['type']
-			add_question(question_text,options,answer,type)
+			qtype="single"
+			add_question(question_text,options,answer,qtype)
 				
 			return "operation successfully done"
-	return "GET not supported"		
+	return render_template("submit_question.html")		
 
 
+
+@app.route('/addteam',methods=['GET','POST'])
+@requires_auth
+def addteam():
+	if request.method == 'POST':
+		email = request.form['email']
+		contact_no = request.form['contact_no']
+		institution = request.form['institution']
+		name_1 = request.form['name_1']
+		team_data = add_team(email,contact_no,name_1,institution)
+		return "teamname:%s password %s"%(team_data[0],team_data[1])
+	return "Operation not possible.Try again"
+	
+
+
+@app.route('/current_results')
+@requires_auth
+def get_current_results():
+	list_of_scores = dict()
+	submitted_users = coll_submitted_users.find()
+	for user in submitted_users:
+		teamid = user['_id']
+		teamdoc = get_team_doc(teamid)
+		score = calculate_score(user['submitted_answers'])
+		list_of_scores[teamid] = [teamdoc['teamname'],teamdoc['institution'],teamdoc['contact_no'],score]
+	return render_template('results.html',scores=list_of_scores,title="Results")
+
+@app.route('/allquestions')
+@requires_auth
+def allquestions():
+	questions = coll_questions.find()
+  	l = []
+	for question in questions :
+		l.append(question)
+	return render_template('questions.html',questions=l)
+	

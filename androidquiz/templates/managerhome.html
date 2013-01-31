@@ -1,8 +1,10 @@
-<! doctype html>
+<!doctype html>
 
 
 	<head>
 		<title> Manager Home</title>
+		
+		
 	</head>
 
 
@@ -10,6 +12,9 @@
 	<body>
 
 
+		<h2> See current results </h2>
+			<p> <a href="/current_results">Click to see Results </a>
+			</p>
 		<h2> Add question </h2>
 	<div>
 		<form method="POST" action="/submitquestion">
@@ -27,15 +32,19 @@
 		<input type="radio" name="type" value="single">single</input>
 		<input type="radio" name="type" value="multiple">multiple</input>
 		<input type="radio" name="type" value="text">text</input>
-
 		<input type="submit" value="save question">
-	</form>
+		<input type="reset" value="clear">
+	    </form>
 	</div>
 
-	<div id="boxer">
-		 <input type="text" name="teamname" placeholder="teamname"/>
-		 <button type="button" name="generator"/>
-	</div>
+	<form method="POST" action="/addteam">
+		 <input type="text" name="institution" placeholder="Institution"/>
+		 <input type="text" name="name_1" placeholder="Member 1"/>
+		 <input type="text" name="name_2" placeholder="Member 2"/>
+		 <input type="text" name="contact_no" placeholder="Contact No"/>
+		 <input type="text" name="email" placeholder="Email"/>
+		 <input type="submit" value="Create Team" />
+	</form>
 
 
 

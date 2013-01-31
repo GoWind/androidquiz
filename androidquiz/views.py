@@ -1,8 +1,9 @@
-from androidquiz import app,roles, coll_users
+from androidquiz import app,roles, coll_users,cache
 from flask import render_template,url_for,redirect,request,flash,session,Response
 from cgi import escape
 import models
 from functools import wraps
+import pymongo
 
 
 def authenticate():
@@ -24,34 +25,9 @@ def requires_auth(f):
 @app.route('/',methods=['GET','POST'])
 
 def home():
-	''' view for homepage'''
-	if request.method == 'POST':
-		teamname = escape(request.form['teamname'])
-		team = models.search_for_team(teamname)
-		if not team:
-			return "error . your team isnt found . Please ask for a teamname from the event organizers"
-		else:
-			return render_template('registerteam.html',team=team)
-	return render_template('home.html')
-
+	return redirect(url_for('loginteam'))
 
  
-@app.route('/registerteam', methods=['GET','POST'])
-def register_user():
-	'''registers a team and enable them to access the quiz '''
-	if request.method == 'POST':
-	  	teamid = escape(request.form['id'])
-	  	password = escape(request.form['password'])
-	  	confirm = escape(request.form['confirm'])
-	  	if confirm != password:
-	  			return "passwords dont match enter again"
-	  	else:
-		 '''register team'''
-		 result = models.register_team(teamid,password)
-		 if not result:
-			return "An error has occured.Please try again later"
-		 else:
-			return "You have registered successful.Login from the homepage to access the quiz"
 
 		
 	
@@ -61,26 +37,35 @@ def register_user():
 @requires_auth
 def quiz():	
 	if models.has_submitted(session['teamid']):
-		return "You have already taken the quiz. You cannot take it again"
-	questions = models.get_questions()
-	return render_template('quizpage.html',questions = questions,teamid=session['teamid'])
+		return render_template('errorpage.html',error_header="Oopsie!",error_message="It Looks like you have already taken your quiz.<a href='/logout'>Click here to logout</a>")
+	if 'quizac' not in session:
+		session['quizac'] = 1
+		questions = models.get_questions()
+		return render_template('quizpage.html',questions = questions,teamid=session['teamid'],teamname = session['teamname'])
+	elif session['quizac'] == 1:
+		return render_template('errorpage.html',error_header="Oops !",error_message="Sorry.But page reloads aint allowed.Contact the event co-ordinator")
+	
 
 
 @app.route('/submit',methods=['GET','POST'])
 @requires_auth
 def submit():
 		if request.method == 'POST':
+			if models.has_submitted(session['teamid']):
+				return "You have already submitted  your quiz."
 			team_answers = dict()
+			if 'teamid' not in request.form :
+				return "Error in submitting form"
 			teamid =''
+			teamid = request.form['teamid'].strip()
 			for key in request.form:
 				if key == 'teamid':
-					teamid = request.form[key]
+					continue
 				else:
-					team_answers[key] = request.form[key]
-			if len(teamid) == 0:
-				return "Error in submitting form"
-			models.submit_team(teamid,team_answers)
-			return "You have submitted your response  . Please wait until we announce the results"
+				   team_answers[str(key).strip()] = request.form[key].strip()
+			models.submit_team(teamid,session['teamname'],team_answers)		        			
+			return "Your response has been submitted . Please wait for a short period of time till we announce the results"
+
 		return "Get not supported"
 
 
@@ -90,19 +75,38 @@ def loginteam():
 	'''logs in checked and registered teams'''
 	'''check to see if user has already submitted his quiz'''
 	if request.method == 'POST':
-		teamnumber = escape(request.form['teamnumber'])
+		teamnumber = escape(request.form['teamname'])
 		password = escape(request.form['password'])
 		y = models.search_for_registered_team(teamnumber,password)
 		if y:
-		 session['teamid']=teamnumber
-		 session['logged_in_as'] = roles[0]
-		 session['logged'] = True
-		 session.permanent = False
-		 '''replace it with landing'''
-		 return redirect(url_for('quiz'))
+			teamid = y['_id']
+			if models.has_submitted(teamid):
+			  return render_template('errorpage.html',error_header="Oopise !",error_message="Sorry. You have already taken the quiz. You cant take it again")
+			session['teamid']=y['_id']
+			session['teamname'] = teamnumber
+			session['logged_in_as'] = roles[0]
+			session['logged'] = True
+			session.permanent = False
+			return redirect(url_for('quiz'))
 		else:
-			return "Sorry . Not allowed"
+			return render_template('errorpage.html',error_header="Invalid", error_message='Either your username or password is invalid.Check again')
 	return render_template('loginteam.html')
 
 
+@app.route('/logout')
+@requires_auth
+def logout():
+	for key in ['teamid','teamname','logged_in_as','logged' ]:
+		session.pop(key,None)
+	return "Thank you we will post the result of the quiz in a short span of time"
 
+
+
+@app.route('/error')
+def error():
+	return render_template('errorpage.html',error_header="Sample Error",error_message="Dai error da")
+
+
+
+
+		

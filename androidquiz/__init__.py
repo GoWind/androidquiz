@@ -1,8 +1,9 @@
 import sys
 from flask import Flask
 import pymongo
+from werkzeug.contrib.cache import SimpleCache
 app = Flask(__name__)
-
+cache = SimpleCache()
 app.config['MONGODB_HOST'] = 'localhost'
 app.config['MONGODB_PORT'] = 27017
 app.config['MONGODB_DATABASE'] = __name__

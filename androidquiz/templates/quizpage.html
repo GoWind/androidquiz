@@ -5,42 +5,59 @@
 
 		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<script type="text/javascript" src={{ url_for('static',filename = 'timerscript.js') }} ></script>
+		<link rel="stylesheet" type="text/css" href= {{ url_for('static',filename='bootstrap.min.css') }} />
 		<style type="text/css">
 			#quizform { display: none;
 		}
+		.question { font-weight:bold; font-family: "Consolas","Lucida Console","Ubuntu Mono",sans-serif;
+			    width:100%; 
+		 }
+		#start_button { width:50%;margin-left:20%;font-size:2em; padding:0.5em; }
+		#txt { color:white;}
+		body { margin-top:6em; }
 		</style>
 		<script type="text/javascript">
 				start = function(){
 					var form  = document.getElementById('quizform');
 					form.style.display = 'block';
+					var button = document.getElementById('start_button');
+					button.style.display = 'none';
 					init();
 				}
 		</script>
 		</head>
 
 		<body>
-
-			<div id="numbers">
-				<input id="txt" readonly="true" type="text" value="00:00" border="0" name="disp">
-			</div>
-
-			<div id="buttonbox">
-				<button type="button" onclick="start();return false">Click me</button>
-			</div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+     <a class="brand" href="#"><h1>DROID'SFIDA</h1></a>
+    <ul class="nav pull-right">
+	<li> <h3> {{ teamname }} </h3> </li>
+	<li> <h3 id="txt"> 00:00</h3></li>
+   </ul>
+  </div>
+</div> 
+			
 			
 
+		
+
+			<div id="buttonbox">
+				<button type="button" id="start_button" onclick="start();return false">Start the Quiz</button>
+			</div>
+			
 				<form id="quizform" method="POST" action="/submit">
-					<input type="hidden" name="teamid" value=" {{ teamid }}" />
+					<input type="hidden" name="teamid" value="{{ teamid }}" />
 					<div id="quiz">
 								{% for question in questions %}
-									<p class="blackbox">
-											<span id="question"> {{ question.question_text }}</span> <br/>
+									<p class="well">
+											<div class="label label-info"> {{ question.question_text }}</div> <br/>
 											{% for option in question.options %}
-											<input type="radio" name = {{ question._id }} value= {{ option }}> {{ question.options[option] }} </input>
+											<input type="radio" name = {{ question._id }} value= {{ option }}> {{ question.options[option] }} </input> <br/>
 											{% endfor %}
 									</p>
 								{% endfor %}
-								<input type="submit" value="Done.Submit."/>
+								<input type="submit" value="DoneSubmit."/>
 					</div>
 				</form>
 		</div>

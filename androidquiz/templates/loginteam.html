@@ -1,32 +1,35 @@
-<! doctype html>
-
-	<head>
-		<title>Team Home</title>
-		<style type="text/css">
-			.blackbox { border: 1px solid black;margin-right:50%;
-						margin-left:20%;
-						padding:0.2em;
-			}
-		</style>
-	</head>
-
-
-	<body>
-		<div style="margin-top:6em"></div>
-		<form class="blackbox" method="POST" action="">
-			<input  type="text" name="teamnumber" placeholder="Team number"></input>
-			<br/>
-			 <input type="password" name="password" placeholder="Password"></input> <br/>
-			
-
-		<input style="margin-left:1em" type="submit" value="Login"/>
-		</form>
-		
-
-
-	</body>
-
-
-
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href = " {{ url_for('static',filename='bootstrap.min.css') }} "/>
+    <link rel="stylesheet" type="text/css" href= " {{ url_for('static',filename='font_style.css') }} " />
+    <style type="text/css">
+    
+    .navbar-inner .special { background:red;color:white;margin-left:20%;font-family:Droid_Robot;font-size:1.4em;}
+    </style>
+  </head>
+  <div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <a class="brand special" href="#"><h1>DROIDSFIDA</h1></a>
+    </ul>
+  </div>
+</div>
+  	
+  		
+        <div class="hero-unit">
+    	<form class="form down" method="POST">
+	
+		<input class="input-large" type="text" name="teamname" placeholder="team name">
+		<br/>
+		<input class="input-large" type="password" name="password" placeholder="password">
+		<br/>
+		<input class="btn" type="submit" value="Login"/>
+	</form>
+	</div>
+	<center style="font-size:4em"> Cyberfest 2013</center><br/>
+	<center> CIT Softies Welcomes You</center>
+</div>
+</div>
+  </body>
 </html>

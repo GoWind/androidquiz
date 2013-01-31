@@ -46,7 +46,7 @@ function dis(mins,secs) {
   		mins--;
  	}
 
- 	document.getElementById('txt').value = dis(mins,secs); // setup additional displays here.
+ 	document.getElementById('txt').innerHTML = dis(mins,secs); // setup additional displays here.
  	if((mins == 0) && (secs == 0)) {
   		call_action();
  	} else {
