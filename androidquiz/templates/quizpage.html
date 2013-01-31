@@ -4,14 +4,15 @@
 		<head>
 
 		<link rel="stylesheet" type="text/css" href="style.css"/>
-		<script type="text/javascript" src={{ url_for('static',filename = 'timerscript.js') }} ></script>
+		<script type="text/javascript" src={{ url_for('static',filename ='timerscript.js') }} ></script>
 		<link rel="stylesheet" type="text/css" href= {{ url_for('static',filename='bootstrap.min.css') }} />
 		<style type="text/css">
 			#quizform { display: none;
 		}
 		.question { font-weight:bold; font-family: "Consolas","Lucida Console","Ubuntu Mono",sans-serif;
-			    width:100%; 
+			    width:100%;background:#000;border-radius:4px;width:90%;margin-right:10%;color:white;
 		 }
+		.answer { background:#999966;color:black;border-radius:10px;width:90%;font-weight:bold; } 
 		#start_button { width:50%;margin-left:20%;font-size:2em; padding:0.5em; }
 		#txt { color:white;}
 		body { margin-top:6em; }
@@ -32,7 +33,7 @@
   <div class="navbar-inner">
      <a class="brand" href="#"><h1>DROID'SFIDA</h1></a>
     <ul class="nav pull-right">
-	<li> <h3> {{ teamname }} </h3> </li>
+	<li> <h3 style="color:#33cc33;margin-right:5%"> {{ teamname }} </h3> </li>
 	<li> <h3 id="txt"> 00:00</h3></li>
    </ul>
   </div>
@@ -51,10 +52,10 @@
 					<div id="quiz">
 								{% for question in questions %}
 									<p class="well">
-											<div class="label label-info"> {{ question.question_text }}</div> <br/>
-											{% for option in question.options %}
+											<div class="question"> {{ question.question_text }}</div> <br/>
+										 <div class="answer">	{% for option in question.options %} 
 											<input type="radio" name = {{ question._id }} value= {{ option }}> {{ question.options[option] }} </input> <br/>
-											{% endfor %}
+											{% endfor %}</div>
 									</p>
 								{% endfor %}
 								<input type="submit" value="DoneSubmit."/>

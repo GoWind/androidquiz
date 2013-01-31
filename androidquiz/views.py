@@ -81,13 +81,13 @@ def loginteam():
 		if y:
 			teamid = y['_id']
 			if models.has_submitted(teamid):
-			  return render_template('errorpage.html',error_header="Oopise !",error_message="Sorry. You have already taken the quiz. You cant take it again")
+			  return render_template('errorpage.html',error_header="Oopsie !",error_message="Sorry. You have already taken the quiz. You cant take it again")
 			session['teamid']=y['_id']
 			session['teamname'] = teamnumber
 			session['logged_in_as'] = roles[0]
 			session['logged'] = True
 			session.permanent = False
-			return redirect(url_for('quiz'))
+			return render_template('landing.html')
 		else:
 			return render_template('errorpage.html',error_header="Invalid", error_message='Either your username or password is invalid.Check again')
 	return render_template('loginteam.html')

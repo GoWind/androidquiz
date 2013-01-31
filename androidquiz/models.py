@@ -28,14 +28,14 @@ def submit_team(teamid ,teamname,answers):
 	coll_submitted_users.insert({"_id" :teamid, "teamname":teamname, "submitted_answers" : answers , "submitted" : True})
 		
 
-def add_team(email,contact_no,name_1,institution):
+def add_team(email,contact_no,name_1,name_2,institution):
 	''' adding a team by manager'''
 	currentno = get_seq(coll_counter,"users")
 	teamname = "droidsfida" + str(currentno)
 	password = str(uuid4())[:7]
 	try:
 	  coll_users.insert( { "_id" : currentno , "teamname" : teamname ,'registered':False,'password': password,
-		                 'email':email,'contact_no':contact_no,'name_1':name_1,'institution':institution})
+		                 'email':email,'contact_no':contact_no,'name_1':name_1,'institution':institution,'name_2':name_2})
 	  update_seq_by1(coll_counter , "users")
 	except pymongo.errors.PyMongoError:
 		return ("Error","Unable to add user")

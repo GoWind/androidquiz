@@ -99,7 +99,8 @@ def addteam():
 		contact_no = request.form['contact_no']
 		institution = request.form['institution']
 		name_1 = request.form['name_1']
-		team_data = add_team(email,contact_no,name_1,institution)
+		name_2 = request.form['name_2']
+		team_data = add_team(email,contact_no,name_1,name_2,institution)
 		return "teamname:%s password %s"%(team_data[0],team_data[1])
 	return "Operation not possible.Try again"
 	

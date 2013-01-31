@@ -1,4 +1,0 @@
-androidquiz
-<class 'flask_mongokit.MongoKit'>
-androidquiz
-<class 'flask_mongokit.MongoKit'>

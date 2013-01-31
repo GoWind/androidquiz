@@ -2,7 +2,7 @@ var mins;
 var secs;
 				
 function cd() {
- 	mins = 1 * m("05"); // change minutes here
+ 	mins = 1 * m("30"); // change minutes here
  	secs = 0 + s(":01"); // change seconds here (always add an additional second to your total)
  	redo();
 }
